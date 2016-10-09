@@ -26,6 +26,8 @@ def get_encode(image):
 def take_picture(counter):
         photo_file = "image" + str(counter) + ".jpg"
         with picamera.PiCamera() as camera:
+		camera.resolution = (1280, 720)
+		camera.rotation = 270
                 camera.capture(photo_file)
                 print(photo_file + " is just captured!")
 	
@@ -87,11 +89,11 @@ while True:
 			data = 'OMG SOMETHING WENT WRONG!' 
 		client_sock.send(data)
 		print "number of letters" + str(len(data))
-
+		os.system("sudo rm image" + str(counter) + ".jpg" )
     	client_sock.close()
 
         print("connection closed")
-os.system("sudo rm image*.jpg")
+#os.system("sudo rm image*.jpg")
 server_sock.close()
 
 
