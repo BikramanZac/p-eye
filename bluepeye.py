@@ -91,7 +91,7 @@ while True:
     	client_sock.close()
 
         print("connection closed")
-
+os.system("sudo rm image*.jpg")
 server_sock.close()
 
 
