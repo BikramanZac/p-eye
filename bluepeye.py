@@ -89,7 +89,7 @@ while True:
 			data = 'OMG SOMETHING WENT WRONG!' 
 		client_sock.send(data)
 		print "number of letters" + str(len(data))
-		os.system("sudo rm image" + str(counter) + ".jpg" )
+		os.system("sudo rm image*.jpg" )
     	client_sock.close()
 
         print("connection closed")
