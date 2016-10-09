@@ -70,36 +70,40 @@ while True:
 	try:
         	data = client_sock.recv(1024)
     		if len(data) == 0: break
-       	    print "received [%s]" % data
+  		print "received [%s]" % data
 
-			if data == 'imageRecognition':
-				#take a picture function here!
-				"""
-				photo_file = take_picture()
-				data = str(get_encode(photo_file)) + "!"
-				""" 
-				data = str(get_encode("/home/pi/git/p-eye/fruits.jpg")) + "!"	
+		if data == 'imageRecognition':
+			#take a picture function here!
+			"""
+			photo_file = take_picture()
+			data = str(get_encode(photo_file)) + "!"
+			""" 
+			data = str(get_encode("/home/pi/git/p-eye/fruits.png")) + "!"	
 
-			elif data == 'faceRecognition':			
-				data = str(get_encode("/home/pi/git/p-eye/face.jpg")) + "!"
+		elif data == 'faceRecognition':			
+			data = str(get_encode("/home/pi/git/p-eye/face.jpg")) + "!"
 
-			elif data == 'textRecognition':			
-				data = str(get_encode("/home/pi/git/p-eye/greentext.jpg")) + "!"
-			else:
-				data = 'OMG SOMETHING WENT WRONG!' 
+		elif data == 'textRecognition':			
+			data = str(get_encode("/home/pi/git/p-eye/greentext.jpg")) + "!"
 
-		    client_sock.send(data)
-			print "sending [%s]" % data
-			print "number of letters" + str(len(data))
-		except IOError:
-			pass
+		elif data == 'takePicture':
+			data = str(get_encode("/home/pi/git/p-eye/greentext.jpg")) + "!"
 
-		except KeyboardInterrupt:
+		else:
+			data = 'OMG SOMETHING WENT WRONG!' 
 
-			print "disconnected"
+         	client_sock.send(data)
+		#print "sending [%s]" % data
+		print "number of letters" + str(len(data))
+	except IOError:
+		pass
 
-			client_sock.close()
-			server_sock.close()
-			print "all done"
+	except KeyboardInterrupt:
 
-			break
+		print "disconnected"
+
+		client_sock.close()
+		server_sock.close()
+		print "all done"
+
+		break
