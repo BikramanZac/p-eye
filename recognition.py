@@ -60,7 +60,7 @@ def color_detect(photo_file):
             cv2.CHAIN_APPROX_SIMPLE)
     cnts_blue = cnts_blue[0] if imutils.is_cv2() else cnts_blue[1]
 
-    # only proceed if at least one contour was found
+    # only proceed if at least one red contour was found
     if len(cnts_red) > 0:
         print "a contour is found!!"
         c = max(cnts_red, key=cv2.contourArea)
@@ -84,7 +84,8 @@ def color_detect(photo_file):
         #print crop_img.shape    
         cv2.imwrite("cropped_"+ photo_file, crop_img) 
         return 0
-
+    
+    # only proceed if at least one green contour was found
     if len(cnts_green) > 0:
         print "a contour is found!!"
         c = max(cnts_green, key=cv2.contourArea)
@@ -107,8 +108,9 @@ def color_detect(photo_file):
         # NOTE: its img[y: y + h, x: x + w] and *not* img[x: x + w, y: y + h]
         #print crop_img.shape    
         cv2.imwrite("cropped_"+ photo_file, crop_img) 
-
         return 1
+    
+    # only proceed if at least one blue contour was found
     if len(cnts_blue) > 0:
         print "a contour is found!!"
         c = max(cnts_blue, key=cv2.contourArea)
@@ -136,7 +138,7 @@ def color_detect(photo_file):
 
 
     
-
+# open the photo and send a request to Google API. then get the response return the text
 def get_text(photo_file):
     """Run a label request on a single image"""
 
@@ -166,12 +168,12 @@ def get_text(photo_file):
             # [END construct_request]
             # [START parse_response]
             response = service_request.execute()
-            label = response['responses'][0]['textAnnotations'][0]['description']
+            text = response['responses'][0]['textAnnotations'][0]['description']
             print('Found label: %s for %s' % (label, photo_file))
             # [END parse_response]
-            return label
+            return text
     except:
-        print "couldn't find a contour!"
+        return "couldn't find a contour!"
 
 def get_label(photo_file):
     """Run a label request on a single image"""
@@ -207,7 +209,7 @@ def get_label(photo_file):
             # [END parse_response]
             return label
     except:
-        print "couldn't find a contour!"
+        return "couldn't find a contour!"
 
 
 
