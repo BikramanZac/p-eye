@@ -173,7 +173,7 @@ def get_text(photo_file):
             # [END parse_response]
             return text
     except:
-        return "couldn't find a contour!"
+        return "couldn't find any text!"
 
 def get_label(photo_file):
     """Run a label request on a single image"""
@@ -209,7 +209,7 @@ def get_label(photo_file):
             # [END parse_response]
             return label
     except:
-        return "couldn't find a contour!"
+        return "couldn't find a label!"
 
 
 
