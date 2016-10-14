@@ -95,7 +95,7 @@ def color_detect_and_crop_image(photo_file):
         # NOTE: its img[y: y + h, x: x + w] and *not* img[x: x + w, y: y + h]
         #print crop_img.shape    
         cv2.imwrite("cropped_"+ photo_file, crop_img) 
-<<<<<<< HEAD
+
         return 0       
     
     # only proceed if at least one blue contour was found
@@ -105,7 +105,7 @@ def color_detect_and_crop_image(photo_file):
     
     # only proceed if at least one green contour was found
     if len(cnts_green) > 0:
->>>>>>> 917edba5e4e0cabb88f3b6b582fe8f71e8370ae3
+
         print "a contour is found!!"
         c = max(cnts_blue, key=cv2.contourArea)
         #((x, y), radius) = cv2.minEnclosingCircle(c)
@@ -127,17 +127,17 @@ def color_detect_and_crop_image(photo_file):
         # NOTE: its img[y: y + h, x: x + w] and *not* img[x: x + w, y: y + h]
         #print crop_img.shape    
         cv2.imwrite("cropped_"+ photo_file, crop_img) 
-<<<<<<< HEAD
+
         return 2    
 
 	# only proceed if at least one green contour was found
     if len(cnts_green) > 0:
-=======
+
         return 1
     
     # only proceed if at least one blue contour was found
     if len(cnts_blue) > 0:
->>>>>>> 917edba5e4e0cabb88f3b6b582fe8f71e8370ae3
+
         print "a contour is found!!"
         c = max(cnts_green, key=cv2.contourArea)
         #((x, y), radius) = cv2.minEnclosingCircle(c)
@@ -193,20 +193,20 @@ def get_text(photo_file):
             # [START parse_response]
             response = service_request.execute()
             text = response['responses'][0]['textAnnotations'][0]['description']
-<<<<<<< HEAD
+
             print('Found label: %s for %s' % (text, photo_file))
             # [END parse_response]
             return text
     except:
         return "sth wrong with text"
 
-=======
+
             print('Found label: %s for %s' % (label, photo_file))
             # [END parse_response]
             return text
     except:
         return "couldn't find any text!"
->>>>>>> 917edba5e4e0cabb88f3b6b582fe8f71e8370ae3
+
 
 def get_label(photo_file):
     """Run a label request on a single image"""
@@ -266,7 +266,7 @@ def get_label(photo_file):
             # [END parse_response]
             return label
     except:
-<<<<<<< HEAD
+
         return "something wrong with recognizting objects"
     
 def detect_face(photo_file):
@@ -309,9 +309,8 @@ def detect_face(photo_file):
         return 0
 
 
-=======
+
         return "couldn't find a label!"
->>>>>>> 917edba5e4e0cabb88f3b6b582fe8f71e8370ae3
 
 
 
@@ -366,9 +365,7 @@ def crop_image(photo_file):
         # NOTE: its img[y: y + h, x: x + w] and *not* img[x: x + w, y: y + h]
         #print crop_img.shape    
         cv2.imwrite("cropped_"+ photo_file, crop_img) 
-<<<<<<< HEAD
+
 
     
 
-=======
->>>>>>> 917edba5e4e0cabb88f3b6b582fe8f71e8370ae3
