@@ -4,9 +4,9 @@ import cStringIO
 import PIL.Image
 import urllib2 as urllib
 import io
-#import cv2
+import cv2
 import numpy
-#import imutils
+import imutils
 import os
 import sys
 import argparse
@@ -16,9 +16,8 @@ from oauth2client.client import GoogleCredentials
 
 """
 IT STARTS OFF WITH GOOGLE API RESPONSE
-
 """
-class GoogleAPI(object):
+class GoogleApi(object):
     def __init__(self, photo_file):        
         self.bool_text = False
         self.bool_face = False
@@ -56,32 +55,55 @@ class GoogleAPI(object):
             response = service_request.execute()
             #label = response['responses'][0]['labelAnnotations'][0]['description']
             label = response['responses'][0]
+            self.label = label
             #print "textAnnotations" in label
             self.bool_text = "textAnnotations" in label
             self.bool_face = "faceAnnotations" in label
             
-            print('Found label: %s for %s' % (label, photo_file))
+            #print('Found label: %s for %s' % (label, photo_file))
            
              
     def is_face(self):
         return self.bool_face
+
     def is_text(self):
         return self.bool_text
     
     def get_text(self):
-        return ""
+        #self.label = response['responses'][0]
+        """
+        if not self.bool_text:
+            return None
+        """
+        return self.label['textAnnotations'][0]['description']
 
     def get_face(self):
-        return ""
+        #self.label = response['responses'][0]
+        """
+        if not self.bool_face:
+            return None
+        """
+        dictionary = self.label['faceAnnotations'][0]                       
+
+        for e in dictionary.keys():
+            if (dictionary[e] == "VERY_LIKELY"):
+                emotion = e                     
+
+        #print ("VERY_LIKELY" in dictionary.values())
+        return emotion
 
     def get_label(self):
-        return ""
+        #self.label = response['responses'][0]
+        return self.label['labelAnnotations'][0]['description']
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('image_file', help='The image you\'d like to label.')
     args = parser.parse_args()
-    google = GoogleAPI(args.image_file)
+    google = GoogleApi(args.image_file)
     print google.is_face()
-    print google.is_text()
+    print google.get_text()
+    print google.is_text()    
+    print google.get_face()
+    print google.get_label()
