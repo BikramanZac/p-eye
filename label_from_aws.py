@@ -39,7 +39,7 @@ def get_label(image):
     #es.say(dic_label.values()[0])
     subprocess.call("pico2wave -w test.wav "+'\"'+text+'\"' ,shell=True)
     subprocess.call("aplay test.wav",shell=True)
-
+    os.system("sudo rm test.wav")
     
 
 if __name__ == "__main__":
