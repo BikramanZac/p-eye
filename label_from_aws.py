@@ -34,8 +34,12 @@ def get_label(image):
     dic_label = r.json()
     #print dic_label.values()[0]
     text = dic_label.values()[0]
-    es = ESpeak(word_gap=17, speed=150, voice='en+f3')
-    es.say(dic_label.values()[0])
+    print text
+    #es = ESpeak(word_gap=17 ,speed=160, voice='en-us+f8')
+    #es.say(dic_label.values()[0])
+    subprocess.call("pico2wave -w test.wav "+'\"'+text+'\"' ,shell=True)
+    subprocess.call("aplay test.wav",shell=True)
+
     
 
 if __name__ == "__main__":
