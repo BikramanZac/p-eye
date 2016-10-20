@@ -51,3 +51,9 @@ class ESpeak:
             The phoneme, as read by speak
         """
         return self._execute(self._espeak_args(text))
+    
+    def _validate_args(self):
+        for k, v in self.args.items():
+            if type(v[1]) != v[2]:
+                raise TypeError(
+                    "Error: argument {0} does not match {1}".format(k, v[2]))
