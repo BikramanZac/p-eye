@@ -1,12 +1,7 @@
 #export GOOGLE_APPLICATION_CREDENTIALS=Google_vision_api-6f831dbb290a.json
 import base64
 import cStringIO
-import PIL.Image
 import urllib2 as urllib
-import io
-import cv2
-import numpy
-import imutils
 import os
 import sys
 import argparse
