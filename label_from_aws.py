@@ -18,11 +18,11 @@ def get_label(image):
         encoded_string = base64.b64encode(image_file.read())
 
         #print type(encoded_string)
-
+    """
     converts = base64.b64decode(encoded_string)
     file_like = cStringIO.StringIO(converts)     #for testing
     img = PIL.Image.open(file_like)
-
+    """
     url= "http://ec2-52-88-62-32.us-west-2.compute.amazonaws.com/todo/api/v1.0/images"    
     data = {'encode' : encoded_string }
     headers = {'Content-Type': 'application/json'}
