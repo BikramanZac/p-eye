@@ -5,6 +5,7 @@ import requests
 import os
 import json
 import argparse
+from espeak import Espeak
 
 def get_label(image):
     """
@@ -31,8 +32,11 @@ def get_label(image):
 
     # r is json type. r.json() convert json type to dic type
     dic_label = r.json()
-    print dic_label.values()[0]
-
+    #print dic_label.values()[0]
+    text = dic_label.values()[0]
+    es = Espeak()
+    es.say(dic_label.values()[0])
+    
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
