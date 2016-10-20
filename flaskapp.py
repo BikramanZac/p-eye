@@ -9,6 +9,7 @@ import numpy
 import imutils
 import os
 import recognition
+from GoogleApi import GoogleApi
 
 from googleapiclient import discovery
 from oauth2client.client import GoogleCredentials
@@ -78,31 +79,24 @@ def get_image_and_produce_label():
     photo_file = "pilpic.jpg"
     pil_img.save(photo_file)       
 
-    # detect face and if there is face return the emtion
-    is_there_face = recognition.detect_face(photo_file)    
+    
     text = ""
-    # if there is a face in the picture is_there_face contains 
-    # a string of emotion
+    
+    google = GoogleApi(photo_file)
 
+    # detect color and crop the picture then 
+    # return 0, 1, 2 depending on the color 
+    which_color = recognition.color_detect_and_crop_image(photo_file)
 
-    if(is_there_face != 0):
-        text = "" + is_there_face    
+    if(google.is_face() == True):
+        text = "" + google.get_face()    
 
-    # 0 is red, 1 is green, 2 is blue(still available for smthnig else)    
+    elif(google.is_text() == True and which_color == 1): # 1: green      
+        text = "" + recognition.get_text(photo_file)
+
     else:
-        #if(which_color == 0 ):  # red
-        # but what if the object is red colored? 
-        # --> we need a special or rare color not smth like red or blue 
         text = "" + recognition.get_label(photo_file)
-        
-        # detect color and crop the picture then 
-        # return 0, 1, 2 depending on the color
-        
-        which_color = recognition.color_detect_and_crop_image(photo_file)
-        if(which_color == 1):   # green
-            # you can also detect text by looking at there is a text or not
-            text = "" + recognition.get_text(photo_file)
-       
+
     
     #cv2.imshow('yes', imcv)
     #cv2.waitKey(0)
@@ -127,6 +121,5 @@ def get_image_and_produce_label():
 
 
 if __name__ == '__main__':
-  app.run()
-
+  app.run(host='0.0.0.0', port = 6000)
 
