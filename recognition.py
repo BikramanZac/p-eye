@@ -71,7 +71,7 @@ def color_detect_and_crop_image(photo_file):
     
     # only proceed if at least one red contour was found
     if len(cnts_red) > 0:
-        print "a contour is found!!"
+        print "a red contour is found!!"
         c = max(cnts_red, key=cv2.contourArea)
         #((x, y), radius) = cv2.minEnclosingCircle(c)
         M = cv2.moments(c)
@@ -96,7 +96,7 @@ def color_detect_and_crop_image(photo_file):
     
     # only proceed if at least one blue contour was found
     if len(cnts_blue) > 0:
-        print "a contour is found!!"
+        print "a blue contour is found!!"
         c = max(cnts_blue, key=cv2.contourArea)
         #((x, y), radius) = cv2.minEnclosingCircle(c)
         M = cv2.moments(c)
@@ -121,7 +121,7 @@ def color_detect_and_crop_image(photo_file):
 
 	# only proceed if at least one green contour was found
     if len(cnts_green) > 0:
-        print "a contour is found!!"
+        print "a green contour is found!!"
         c = max(cnts_green, key=cv2.contourArea)
         #((x, y), radius) = cv2.minEnclosingCircle(c)
         M = cv2.moments(c)
@@ -200,7 +200,7 @@ def get_label(photo_file):
 
     cX = width/2 
     cY = height/2
-    parameter = 0.55	# decrease the number to narrow the picture down
+    parameter = 0.55	# decrease the number to crop more space 
     x = cX - (width-cX)*parameter
     y = cY - (height-cY)*parameter
 
@@ -242,9 +242,10 @@ def get_label(photo_file):
             return label
     except:
         return "something wrong with recognizting objects"
-    
+
+"""    
 def detect_face(photo_file):
-    """Run a label request on a single image"""
+    
 
     # [START authenticate]
     credentials = GoogleCredentials.get_application_default()
@@ -281,11 +282,11 @@ def detect_face(photo_file):
     # If there is no face in the picture, it throws an keyError error     
     except:
         return 0
+"""
 
 
 
-
-
+"""
 def crop_image(photo_file):   
 
     # grab the next frame from the video stream, resize the
@@ -338,4 +339,4 @@ def crop_image(photo_file):
         #print crop_img.shape    
         cv2.imwrite("cropped_"+ photo_file, crop_img) 
 
-    
+"""    
