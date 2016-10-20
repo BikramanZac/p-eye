@@ -34,7 +34,7 @@ def get_label(image):
     dic_label = r.json()
     #print dic_label.values()[0]
     text = dic_label.values()[0]
-    es = ESpeak()
+    es = ESpeak(word_gap=17, speed=150, voice='en+f3')
     es.say(dic_label.values()[0])
     
 
