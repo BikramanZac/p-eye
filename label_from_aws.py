@@ -1,11 +1,12 @@
 import base64
-import cStringIO
-import PIL.Image
+#import cStringIO
+#import PIL.Image
 import requests
 import os
 import json
 import argparse
 from espeak import ESpeak
+import subprocess
 
 def get_label(image):
     """
