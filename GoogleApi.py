@@ -10,7 +10,10 @@ from googleapiclient import discovery
 from oauth2client.client import GoogleCredentials
 
 """
-IT STARTS OFF WITH GOOGLE API RESPONSE
+GoogleApi Class
+    it gets a string of a photo name to create an object.
+    then sends a HTTP request to Google Cloud API for image recognitions 
+    (mainly the purpose is to figure out whether the picture has some text or faces in it.)   
 """
 class GoogleApi(object):
     def __init__(self, photo_file):        
@@ -34,10 +37,12 @@ class GoogleApi(object):
                           "type":"FACE_DETECTION",
                           "maxResults":1
                         },
+                        """
                         {
                           "type":"LABEL_DETECTION",
-                          "maxResults":1
+                          "maxResults":1            # doesn't need it
                         },
+                        """
                         {
                           "type":"TEXT_DETECTION",
                           "maxResults":1
@@ -86,11 +91,11 @@ class GoogleApi(object):
 
         #print ("VERY_LIKELY" in dictionary.values())
         return emotion
-
+    """
     def get_label(self):
         #self.label = response['responses'][0]
         return self.label['labelAnnotations'][0]['description']
-
+    """
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
