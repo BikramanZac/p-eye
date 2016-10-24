@@ -91,9 +91,10 @@ def get_image_and_produce_label():
     if(google.is_face() == True):
         text = "" + google.get_face()    
 
-    elif(google.is_text() == True and which_color == 1): # 1: green      
-        text = "" + recognition.get_text(photo_file)
-
+    elif(google.is_text() == True): # 1: green      
+        text = "" + google.get_text()	
+	if(which_color == 1):
+		text = "" + recognition.get_text(photo_file)	
     else:
         text = "" + recognition.get_label(photo_file)
 
