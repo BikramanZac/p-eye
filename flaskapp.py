@@ -86,18 +86,22 @@ def get_image_and_produce_label():
     
     google = GoogleApi(photo_file)
 
-    # detect color and crop the picture then 
-    # return 0, 1, 2 depending on the color 
     
-
+    
+    # if there is a face in the picture
     if(google.is_face() == True):
         text = "Face Found" + google.get_face()    
-
-    elif(google.is_text() == True): # 1: green      
+	
+    # else if there is some text in the picture
+    elif(google.is_text() == True):       
         text = "Text Found" + google.get_text()
+	# detect color and crop the picture then 
+        # return 0, 1, 2 depending on the color 
 	which_color = recognition.color_detect_and_crop_image(photo_file)
-	if(which_color == 1):
+	# if there is some text and a green contour
+	if(which_color == 1):  # 1: green
 		text = "" + recognition.get_text(photo_file)	
+    # else since there is no text and face detected, do label recognition		
     else:
         text = "Label Found" + recognition.get_label(photo_file)
 
