@@ -90,11 +90,11 @@ def get_image_and_produce_label():
     
     # if there is a face in the picture
     if(google.is_face() == True):
-        text = "Face Found" + google.get_face()    
+        text = "Face Found " + google.get_face()    
 	
     # else if there is some text in the picture
     elif(google.is_text() == True):       
-        text = "Text Found" + google.get_text()
+        text = "Text Found " + google.get_text()
 	
 	# detect color and crop the picture then 
         # return 0, 1, 2 depending on the color 
@@ -105,7 +105,7 @@ def get_image_and_produce_label():
 		
     # since there is no text and face detected, do label recognition		
     else:
-        text = "Label Found" + recognition.get_label(photo_file)
+        text = "Label Found " + recognition.get_label(photo_file)
 
     
     #cv2.imshow('yes', imcv)
