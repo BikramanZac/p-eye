@@ -22,7 +22,7 @@ def get_label(image):
     file_like = cStringIO.StringIO(converts)     #for testing
     img = PIL.Image.open(file_like)
 
-    url= "http://localhost:5000/todo/api/v1.0/images"    
+    url= "http://localhost:6000/todo/api/v1.0/images"    
     data = {'encode' : encoded_string }
     headers = {'Content-Type': 'application/json'}
     
