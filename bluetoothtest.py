@@ -84,7 +84,7 @@ while True:
 			data = str(get_encode(photo_file)) + "!"
 			"""
  
-			data = str(get_encode("greentext.jpg")) + "!"	
+			data = str(get_encode("/home/pi/git/p-eye/greentext.jpg")) + "!"	
 		elif data == 'volumeUp':
 			GPIO.output(17,False)
 			data = 'Volume up!'
