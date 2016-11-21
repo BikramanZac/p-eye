@@ -37,12 +37,12 @@ class GoogleApi(object):
                           "type":"FACE_DETECTION",
                           "maxResults":1
                         },
-                        """
+                        
                         {
                           "type":"LABEL_DETECTION",
                           "maxResults":1            # doesn't need it
                         },
-                        """
+                        
                         {
                           "type":"TEXT_DETECTION",
                           "maxResults":1
