@@ -46,7 +46,6 @@ images = [
 
 
 
-
 @app.route('/')
 def hello_world():
   return 'Hello from Flask!'
@@ -80,13 +79,10 @@ def get_image_and_produce_label():
     pil_img = PIL.Image.open(file_like)
     photo_file = "pilpic.jpg"
     pil_img.save(photo_file)       
-
     
     text = ""
     
-    google = GoogleApi(photo_file)
-
-    
+    google = GoogleApi(photo_file)    
     
     # if there is a face in the picture
     if(google.is_face() == True):
@@ -101,11 +97,9 @@ def get_image_and_produce_label():
 	which_color = recognition.color_detect_and_crop_image(photo_file)
 	# if there is some text and a green contour
 	if(which_color == 1):  # 1: green
-		text = "the text is " + recognition.get_text(photo_file) + " "	
-		
+		text = "the text is " + recognition.get_text(photo_file) + " "			
         
     text = text + "the object is " + recognition.get_label(photo_file)
-
     
     #cv2.imshow('yes', imcv)
     #cv2.waitKey(0)
