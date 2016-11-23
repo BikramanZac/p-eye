@@ -92,7 +92,7 @@ def get_image_and_produce_label():
     if(google.is_face() == True):
         text = text + "the facial expression is " + google.get_face() + " "    
 	
-    # else if there is some text in the picture
+    # if there is some text in the picture
     if(google.is_text() == True):       
         text = "the text is " + google.get_text()
 	
@@ -103,8 +103,7 @@ def get_image_and_produce_label():
 	if(which_color == 1):  # 1: green
 		text = "the text is " + recognition.get_text(photo_file) + " "	
 		
-    # since there is no text and face detected, do label recognition		
-    
+        
     text = text + "the object is " + recognition.get_label(photo_file)
 
     
