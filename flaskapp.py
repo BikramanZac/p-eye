@@ -90,22 +90,22 @@ def get_image_and_produce_label():
     
     # if there is a face in the picture
     if(google.is_face() == True):
-        text = "Face Found " + google.get_face()    
+        text = text + "the facial expression is " + google.get_face() + " "    
 	
     # else if there is some text in the picture
-    elif(google.is_text() == True):       
-        text = "Text Found " + google.get_text()
+    if(google.is_text() == True):       
+        text = "the text is " + google.get_text()
 	
 	# detect color and crop the picture then 
         # return 0, 1, 2 depending on the color 
 	which_color = recognition.color_detect_and_crop_image(photo_file)
 	# if there is some text and a green contour
 	if(which_color == 1):  # 1: green
-		text = "" + recognition.get_text(photo_file)	
+		text = "the text is " + recognition.get_text(photo_file) + " "	
 		
     # since there is no text and face detected, do label recognition		
-    else:
-        text = "Label Found " + recognition.get_label(photo_file)
+    
+    text = text + "the object is " + recognition.get_label(photo_file)
 
     
     #cv2.imshow('yes', imcv)
@@ -126,10 +126,9 @@ def get_image_and_produce_label():
     images.append(image)
 
     # return the label in json type       
-    return jsonify({'text': text}), 201
+    return jsonify({'Hello we found ': text}), 201
 
 
 
 if __name__ == '__main__':
   app.run(host='0.0.0.0', port = 6000)
-
