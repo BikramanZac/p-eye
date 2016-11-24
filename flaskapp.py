@@ -44,7 +44,30 @@ images = [
 	}
 ]
 
+def recompile_image(encoded):
+    # decode the encoded string of image
+    data = base64.b64decode(request.json['encode'])  
 
+    # assume data contains your decoded image  http://stackoverflow.com/a/3715530
+    file_like = cStringIO.StringIO(data)
+    pil_img = PIL.Image.open(file_like)
+    photo_file = "pilpic.jpg"
+    pil_img.save(photo_file)
+    return photo_file
+
+def delete_pictures_and_save_results(label):
+    #delete pictures that were saved
+    os.system('rm pilpic.jpg')
+    os.system('rm cropped_pilpic.jpg')
+
+    # create a new dictionary that contains the generated label 
+    image = {
+        'id': images[-1]['id'] + 1,   # guarantee unique id 
+        'label': label   # add a label that got the highest score from recognition
+    }
+
+    #append the created dictionary to the exisitng data
+    images.append(image)
 
 @app.route('/')
 def hello_world():
@@ -54,6 +77,7 @@ def hello_world():
 def get_images():
     return jsonify({'images': images})
 
+# this POST request is only for wireless communication
 @app.route('/todo/api/v1.0/images', methods=['POST'])
 def get_image_and_produce_label():
     """
@@ -66,19 +90,14 @@ def get_image_and_produce_label():
     else  --> crop the picture return label
     
     """
+
     # the type of the data should be json and have to have key 'encode'
     # otherwise I will just abort with 400    
     if not request.json or not 'encode' in request.json:
         abort(400)
 
-    # decode the encoded string of image
-    data = base64.b64decode(request.json['encode'])  
-
-    # assume data contains your decoded image  http://stackoverflow.com/a/3715530
-    file_like = cStringIO.StringIO(data)
-    pil_img = PIL.Image.open(file_like)
-    photo_file = "pilpic.jpg"
-    pil_img.save(photo_file)       
+    # decode and restore the image and save as "pilpic.jpg" and return this name     
+    photo_file = recompile_image(request.json['encode'])       
     
     string = ""
     
@@ -86,44 +105,86 @@ def get_image_and_produce_label():
     
     # if there is a face in the picture
     if(google.is_face() == True):
-        string = string + "the facial expression is " + google.get_face() + " "    
-	
+        string = "the facial expression is " + google.get_face() +" "    
+	  
+        # delete pictures that were saved and create a new dictionary that contains the generated label 
+        delete_pictures_and_save_results(string)
+            
+        # return the label in json type       
+        return jsonify({'Hi': string}), 201
+
     # if there is some text in the picture
     if(google.is_text() == True):       
-        text = "the text is " + google.get_text() + " "
+        text = "the text is " + google.get_text() 
 	
-	# detect color and crop the picture then 
-        # return 0, 1, 2 depending on the color 
-	which_color = recognition.color_detect_and_crop_image(photo_file)
-	# if there is some text and a green contour	
-	if(which_color == 1):  # 1: green
-		text = "the text is " + recognition.get_text(photo_file) + " "
-		
-	string = string + text
-				        
+      	# detect color and crop the picture then 
+        # return 0, 1, 2 depending on the color recognition.three_color_detect_and_crop_image()
+      	which_color = recognition.color_detect_and_crop_image(photo_file)
+      	# if there is some text and a green contour	
+      	if(which_color == 1):  # 1: green
+      		  text = "the text is " + recognition.get_text(photo_file)
+      		
+      	string = string + text
+    				        
     string = string + "the object is " + recognition.get_label(photo_file)
-    
-    #cv2.imshow('yes', imcv)
-    #cv2.waitKey(0)
-    
-    #delete pictures that were saved
-    os.system('rm pilpic.jpg')
-    os.system('rm cropped_pilpic.jpg')
+       
+    #strip '\n' in the string
+    string = string.replace('\n',' ')
 
-    # create a new dictionary that contains the generated label 
-    image = {
-        'id': images[-1]['id'] + 1,   # guarantee unique id 
-        'encode': request.json['encode'],
-        'label': string   # add a label that got the highest score from recognition
-    }
+    # delete pictures that were saved and create a new dictionary that contains the generated label 
+    delete_pictures_and_save_results(string)
+        
+    # return the label in json type       
+    return jsonify({'Hi': string}), 201
 
-    #append the created dictionary to the exisitng data
-    images.append(image)
+
+
+#these following POST requests are specifically for the android app
+@app.route('/todo/api/v1.0/images/label', methods=['POST'])
+def label_recognition():
+    if not request.json or not 'encode' in request.json:
+        abort(400)
+
+    photo_file = recompile_image(request.json['encode'])         
+    string = "the object is " + recognition.get_label(photo_file)    
+    string = string.replace('\n',' ')    
+    delete_pictures_and_save_results(string)    
 
     # return the label in json type       
     return jsonify({'Hi': string}), 201
 
 
+
+@app.route('/todo/api/v1.0/images/text', methods=['POST'])
+def text_recognition():
+    if not request.json or not 'encode' in request.json:
+        abort(400)
+
+    photo_file = recompile_image(request.json['encode'])           
+    google = GoogleApi(photo_file)
+    string = "the text is " + google.get_text()  
+    
+    which_color = recognition.color_detect_and_crop_image(photo_file)    
+    if(which_color == 1):  # 1: green
+        string = "the text is " + recognition.get_text(photo_file)
+        
+    string = string.replace('\n',' ')    
+    delete_pictures_and_save_results(string)
+          
+    return jsonify({'Hi': string}), 201
+
+@app.route('/todo/api/v1.0/images/face', methods=['POST'])
+def facial_expresion_recognition():
+    if not request.json or not 'encode' in request.json:
+        abort(400)
+
+    photo_file = recompile_image(request.json['encode'])           
+    google = GoogleApi(photo_file)
+
+    string = "the facial expression is " + google.get_face() +" "    
+    delete_pictures_and_save_results(string)  
+
+    return jsonify({'Hi': string}), 201
 
 if __name__ == '__main__':
   app.run(host='0.0.0.0', port = 6000)
