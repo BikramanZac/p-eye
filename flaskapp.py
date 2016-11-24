@@ -71,7 +71,7 @@ def delete_pictures_and_save_results(label):
 
 @app.route('/')
 def hello_world():
-  return 'Hello from Flask!'
+    return 'Hello from Flask!'
 
 @app.route('/todo/api/v1.0/images', methods=['GET'])
 def get_images():
@@ -105,7 +105,7 @@ def get_image_and_produce_label():
     
     # if there is a face in the picture
     if(google.is_face() == True):
-        string = "the facial expression is " + google.get_face() +" "    
+    	string = "the facial expression is " + google.get_face() +" "    
 	  
         # delete pictures that were saved and create a new dictionary that contains the generated label 
         delete_pictures_and_save_results(string)
@@ -115,7 +115,7 @@ def get_image_and_produce_label():
 
     # if there is some text in the picture
     if(google.is_text() == True):       
-        text = "the text is " + google.get_text() 
+    	text = "the text is " + google.get_text() 
 	
       	# detect color and crop the picture then 
         # return 0, 1, 2 depending on the color recognition.three_color_detect_and_crop_image()
