@@ -47,11 +47,6 @@ os.system('modprobe w1-gpio')
 os.system('modprobe w1-therm')
 
 
-
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(17, GPIO.OUT)
-
-
 server_sock=BluetoothSocket( RFCOMM )
 server_sock.bind(("",PORT_ANY))
 server_sock.listen(1)
@@ -60,7 +55,7 @@ port = server_sock.getsockname()[1]
 
 uuid = "94f39d29-7d6d-437d-973b-fba39e49d4ee"
 
-advertise_service( server_sock, "AquaPiServer",
+advertise_service( server_sock, "P-eye",
                    service_id = uuid,
                    service_classes = [ uuid, SERIAL_PORT_CLASS ],
                    profiles = [ SERIAL_PORT_PROFILE ], 
@@ -75,37 +70,36 @@ while True:
 	try:
         	data = client_sock.recv(1024)
     		if len(data) == 0: break
-       	        print "received [%s]" % data
+       	    print "received [%s]" % data
 
-		if data == 'takePicture':
-			#take a picture function here!
-			"""
-			photo_file = take_picture()
-			data = str(get_encode(photo_file)) + "!"
-			"""
- 
-			data = str(get_encode("/home/pi/git/p-eye/greentext.jpg")) + "!"	
-		elif data == 'volumeUp':
-			GPIO.output(17,False)
-			data = 'Volume up!'
-		elif data == 'lightOff':
-			GPIO.output(17,True)
-			data = 'light off!'
-		else:
-			data = 'WTF!' 
+			if data == 'imageRecognition':
+				#take a picture function here!
+				"""
+				photo_file = take_picture()
+				data = str(get_encode(photo_file)) + "!"
+				""" 
+				data = str(get_encode("/home/pi/git/p-eye/fruits.jpg")) + "!"	
 
-	        client_sock.send(data)
-		print "sending [%s]" % data
-		print "number of letters" + str(len(data))
-	except IOError:
-		pass
+			elif data == 'faceRecognition':			
+				data = str(get_encode("/home/pi/git/p-eye/face.jpg")) + "!"
 
-	except KeyboardInterrupt:
+			elif data == 'textRecognition':			
+				data = str(get_encode("/home/pi/git/p-eye/greentext.jpg")) + "!"
+			else:
+				data = 'OMG SOMETHING WENT WRONG!' 
 
-		print "disconnected"
+		    client_sock.send(data)
+			print "sending [%s]" % data
+			print "number of letters" + str(len(data))
+		except IOError:
+			pass
 
-		client_sock.close()
-		server_sock.close()
-		print "all done"
+		except KeyboardInterrupt:
 
-		break
+			print "disconnected"
+
+			client_sock.close()
+			server_sock.close()
+			print "all done"
+
+			break
