@@ -22,12 +22,12 @@ def get_encode(image):
 
     return encoded_string
 
-def take_picture():
+def take_picture(counter):
         photo_file = "image" + str(counter) + ".jpg"
         with picamera.PiCamera() as camera:
                 camera.capture(photo_file)
                 print(photo_file + " is just captured!")
-	counter += 1
+	
         return photo_file
 
 server_sock=BluetoothSocket( RFCOMM )
