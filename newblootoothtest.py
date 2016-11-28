@@ -47,14 +47,22 @@ advertise_service( server_sock, "raspberrypi",
                    
 print("Waiting for connection on RFCOMM channel %d" % port)
 
-client_sock, client_info = server_sock.accept()
-print("Accepted connection from ", client_info)
 
-try:
-    while True:
-        data = client_sock.recv(1024)
+
+while True:
+	client_sock, client_info = server_sock.accept()
+	print("Accepted connection from ", client_info)
+	print("waiting for data")
+	total = 0
+
+	while True:
+        try:
+            data = client_sock.recv(1024)
+        except bluetooth.BluetoothError as e:
+            break
         if len(data) == 0: break
-        print("received [%s]" % data)
+        total += len(data)
+        print("total byte read: %d" % total)
 
         if data == 'imageRecognition':
         	data = str(get_encode("/home/pi/git/p-eye/fruits.png")) + "!"
@@ -70,11 +78,8 @@ try:
 		client_sock.send(data)
 		print "number of letters" + str(len(data))
 
-except IOError:
-    pass
+    client_sock.close()
 
-print("disconnected")
+    print("connection closed")
 
-client_sock.close()
 server_sock.close()
-print("all done")
