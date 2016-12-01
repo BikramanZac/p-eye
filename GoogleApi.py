@@ -91,7 +91,7 @@ class GoogleApi(object):
 
         #print ("VERY_LIKELY" in dictionary.values())
         if ("VERY_LIKELY" in dictionary.values()):
-                return emotion
+                return "most likely " + emotion[0:-10]
         else:
                 return "not found"
     """
