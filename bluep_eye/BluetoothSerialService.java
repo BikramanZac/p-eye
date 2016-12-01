@@ -24,7 +24,6 @@ import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.widget.TextView;
 
-
 import com.google.gson.Gson;
 
 /**
