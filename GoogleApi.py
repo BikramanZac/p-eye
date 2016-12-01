@@ -88,13 +88,17 @@ class GoogleApi(object):
         dictionary = self.label['faceAnnotations'][0]                       
 
         for e in dictionary.keys():
-            if (dictionary[e] == "VERY_LIKELY"):
-                emotion = e                     
+            if (dictionary[e] == "VERY_LIKELY" or dictionary[e] == "POSSIBLE"):
+                emotion = e
 
         #print ("VERY_LIKELY" in dictionary.values())
-        if ("VERY_LIKELY" in dictionary.values()):
-                return "most likely " + emotion[0:-10]
-        else:
+        if("VERY_LIKELY" in dictionary.values() or "POSSIBLE" in dictionary.values()):
+                print "VERY_LIKELY is found"
+		return "most likely " + emotion[0:-10]
+        elif("POSSIBLE" in dictionary.values()):
+		print "POSSIBLE is found"
+		return "possibly " + emotion[0:-10]
+	else:
                 return "not found"
     """
     def get_label(self):
