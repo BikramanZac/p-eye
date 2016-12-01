@@ -75,8 +75,10 @@ class GoogleApi(object):
         if not self.bool_text:
             return None
         """
-        return self.label['textAnnotations'][0]['description']
-
+	try:
+        	return self.label['textAnnotations'][0]['description']
+	except:
+		return "not found "
     def get_face(self):
         #self.label = response['responses'][0]
         """
