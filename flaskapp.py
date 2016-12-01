@@ -44,21 +44,26 @@ images = [
 	}
 ]
 
+counter = 0
+
 def recompile_image(encoded):
+    global counter
     # decode the encoded string of image
     data = base64.b64decode(request.json['encode'])  
 
     # assume data contains your decoded image  http://stackoverflow.com/a/3715530
     file_like = cStringIO.StringIO(data)
     pil_img = PIL.Image.open(file_like)
-    photo_file = "pilpic.jpg"
+    photo_file = "pilpic" + str(counter) + ".jpg"
     pil_img.save(photo_file)
+    counter += 1
     return photo_file
 
 def delete_pictures_and_save_results(label):
+    global counter
     #delete pictures that were saved
-    os.system('rm pilpic.jpg')
-    os.system('rm cropped_pilpic.jpg')
+####os.system('rm pilpic'+ str(counter) +'.jpg')
+####os.system('rm cropped' + str(counter)+ '_pilpic.jpg')
 
     # create a new dictionary that contains the generated label 
     image = {
@@ -123,18 +128,18 @@ def get_image_and_produce_label():
       	# if there is some text and a green contour	
       	if(which_color == 1):  # 1: green
       		  text = "the text is " + recognition.get_text(photo_file)
-      		
+
       	string = string + text
-    				        
+
     string = string + "the object is " + recognition.get_label(photo_file)
-       
+
     #strip '\n' in the string
     string = string.replace('\n',' ')
 
     # delete pictures that were saved and create a new dictionary that contains the generated label 
     delete_pictures_and_save_results(string)
-        
-    # return the label in json type       
+
+    # return the label in json type
     return jsonify({'Hi': string}), 201
 
 
