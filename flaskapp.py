@@ -62,8 +62,8 @@ def recompile_image(encoded):
 def delete_pictures_and_save_results(label):
     global counter
     #delete pictures that were saved
-####os.system('rm pilpic'+ str(counter) +'.jpg')
-####os.system('rm cropped' + str(counter)+ '_pilpic.jpg')
+####os.system('rm pilpic*.jpg')
+####os.system('rm cropped_pilpic*.jpg')
 
     # create a new dictionary that contains the generated label 
     image = {
