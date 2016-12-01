@@ -1,4 +1,3 @@
-
 package com.example.android.bluep_eye;
 
 import java.io.BufferedReader;
