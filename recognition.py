@@ -29,8 +29,50 @@ redUpper = (192, 255, 255)
 blueLower = (99, 70, 0)
 blueUpper= (119, 255, 255)
 
-# For Text detection
 def color_detect_and_crop_image(photo_file):
+    frame = cv2.imread(photo_file)
+    frame = imutils.resize(frame, width=500)
+    hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+
+    # construct a mask for the color "green", then perform
+    # a series of dilations and erosions to remove any small
+    # blobs left in the mask
+    mask_green = cv2.inRange(hsv, greenLower, greenUpper)
+    mask_green = cv2.erode(mask_green, None, iterations=2)
+    mask_green = cv2.dilate(mask_green, None, iterations=2)
+
+    # find contours in the mask and initialize the current
+    # (x, y) center of the ball
+    cnts_green = cv2.findContours(mask_green.copy(), cv2.RETR_EXTERNAL,
+            cv2.CHAIN_APPROX_SIMPLE)
+    cnts_green = cnts_green[0] if imutils.is_cv2() else cnts_green[1]
+
+    if len(cnts_green) > 0:
+        print "a green contour is found!!"
+        c = max(cnts_green, key=cv2.contourArea)
+        #((x, y), radius) = cv2.minEnclosingCircle(c)
+        M = cv2.moments(c)
+        center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
+        cX = int(M["m10"] / M["m00"]) 
+        cY = int(M["m01"] / M["m00"]) 
+
+        #frame.shape rows, colomn, color
+        #print frame.shape
+        width = frame.shape[1]
+        height = frame.shape[0]
+        
+        #some parms are multiplied or devided for preserving texts in the picture
+        #they still might need to be twicked little bit
+        crop_img = frame[cY/10:(cY), (cX):(width-cX/2)]
+        # crop_img = frame[(height-cY):(cY), (cX):(width-cX)]  #original cropping
+        # Crop from x, y, w, h -> 100, 200, 300, 400
+        # NOTE: its img[y: y + h, x: x + w] and *not* img[x: x + w, y: y + h]
+        #print crop_img.shape    
+        cv2.imwrite("cropped_"+ photo_file, crop_img) 
+        return 1
+
+# For Text detection
+def three_color_detect_and_crop_image(photo_file):
     frame = cv2.imread(photo_file)
     frame = imutils.resize(frame, width=500)
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
