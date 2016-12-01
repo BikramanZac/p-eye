@@ -90,7 +90,10 @@ class GoogleApi(object):
                 emotion = e                     
 
         #print ("VERY_LIKELY" in dictionary.values())
-        return emotion
+        if ("VERY_LIKELY" in dictionary.values()):
+                return emotion
+        else:
+                return "not found"
     """
     def get_label(self):
         #self.label = response['responses'][0]
