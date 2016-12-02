@@ -76,6 +76,7 @@ class GoogleApi(object):
             return None
         """
 	try:
+		print "text is found " + self.label['textAnnotations'][0]['description']
         	return self.label['textAnnotations'][0]['description']
 	except:
 		return "not found "
