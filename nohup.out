@@ -5,3 +5,4 @@
 127.0.0.1 - - [02/Dec/2016 00:32:42] "POST /todo/api/v1.0/images HTTP/1.1" 201 -
 127.0.0.1 - - [02/Dec/2016 00:33:49] "POST /todo/api/v1.0/images HTTP/1.1" 201 -
 127.0.0.1 - - [02/Dec/2016 00:33:56] "POST /todo/api/v1.0/images HTTP/1.1" 201 -
+ * Running on http://0.0.0.0:6000/ (Press CTRL+C to quit)

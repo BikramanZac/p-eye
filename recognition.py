@@ -222,7 +222,7 @@ def get_text(photo_file):
             # [END parse_response]
             return text
     except:
-        return " was not found"
+        return "was not found "
 
 
 def get_label(photo_file):
@@ -283,7 +283,7 @@ def get_label(photo_file):
             # [END parse_response]
             return label
     except:
-        return " is not found "
+        return "not found "
 
 """    
 def detect_face(photo_file):

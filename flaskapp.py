@@ -114,7 +114,7 @@ def get_image_and_produce_label():
 	  
         # delete pictures that were saved and create a new dictionary that contains the generated label 
         delete_pictures_and_save_results(string)
-            
+	print string
         # return the label in json type       
         return jsonify({'Hi': string}), 201
 
@@ -128,14 +128,14 @@ def get_image_and_produce_label():
       	# if there is some text and a green contour	
       	if(which_color == 1):  # 1: green
       		  text = "the text is " + recognition.get_text(photo_file)
-
+	
       	string = string + text
 
     string = string + "the object is " + recognition.get_label(photo_file)
 
     #strip '\n' in the string
     string = string.replace('\n',' ')
-
+    print string
     # delete pictures that were saved and create a new dictionary that contains the generated label 
     delete_pictures_and_save_results(string)
 
