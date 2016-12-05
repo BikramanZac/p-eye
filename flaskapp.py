@@ -89,10 +89,12 @@ def get_image_and_produce_label():
     reconpile the received picture and save it then
     openCV will start detecting the color and start cropping
     
-    if there is a face in the picture --> return emotion        
-    elif there is some text in the picture  --> return text
-    	and if there is a green contour --> crop the picture then return text
-    else  --> crop the picture return label
+    if there is a face in the image --> return a string of facial expression        
+    
+    if there are some printed words in the image --> concatenate "string" with recognized text
+    	and if there is a green contour --> crop the image, recognize words, and concatenate "string" with recognized text
+    
+    crop the image and concatenate "string" with a label from image recognition then return this "string"
     
     """
 
