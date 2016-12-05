@@ -93,7 +93,7 @@ class GoogleApi(object):
                 emotion = e
 
         #print ("VERY_LIKELY" in dictionary.values())
-        if("VERY_LIKELY" in dictionary.values() or "POSSIBLE" in dictionary.values()):
+        if("VERY_LIKELY" in dictionary.values()):
                 print "VERY_LIKELY is found"
 		return "most likely " + emotion[0:-10]
         elif("POSSIBLE" in dictionary.values()):
