@@ -7,3 +7,12 @@
 127.0.0.1 - - [02/Dec/2016 00:33:56] "POST /todo/api/v1.0/images HTTP/1.1" 201 -
  * Running on http://0.0.0.0:6000/ (Press CTRL+C to quit)
  * Running on http://0.0.0.0:6000/ (Press CTRL+C to quit)
+ * Running on http://0.0.0.0:6000/ (Press CTRL+C to quit)
+/home/ubuntu/git/p-eye/recognition.py:254: VisibleDeprecationWarning: using a non-integer number instead of an integer will result in an error in the future
+  crop_img = frame[y : y + h, x : x + w]
+127.0.0.1 - - [06/Dec/2016 01:32:11] "POST /todo/api/v1.0/images/label HTTP/1.1" 201 -
+127.0.0.1 - - [06/Dec/2016 01:32:37] "POST /todo/api/v1.0/images/text HTTP/1.1" 201 -
+127.0.0.1 - - [06/Dec/2016 01:33:13] "POST /todo/api/v1.0/images/face HTTP/1.1" 201 -
+127.0.0.1 - - [06/Dec/2016 01:33:44] "POST /todo/api/v1.0/images/label HTTP/1.1" 201 -
+127.0.0.1 - - [06/Dec/2016 01:34:13] "POST /todo/api/v1.0/images/label HTTP/1.1" 201 -
+127.0.0.1 - - [06/Dec/2016 01:34:51] "POST /todo/api/v1.0/images/face HTTP/1.1" 201 -
