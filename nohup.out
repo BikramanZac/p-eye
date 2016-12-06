@@ -57,3 +57,10 @@ KeyError: 'faceAnnotations'
 127.0.0.1 - - [06/Dec/2016 22:57:12] "POST /todo/api/v1.0/images/label HTTP/1.1" 201 -
 127.0.0.1 - - [06/Dec/2016 22:57:37] "POST /todo/api/v1.0/images/label HTTP/1.1" 201 -
 127.0.0.1 - - [06/Dec/2016 22:58:11] "POST /todo/api/v1.0/images/label HTTP/1.1" 201 -
+ * Running on http://0.0.0.0:6000/ (Press CTRL+C to quit)
+/home/ubuntu/git/p-eye/recognition.py:280: VisibleDeprecationWarning: using a non-integer number instead of an integer will result in an error in the future
+  crop_img = image[y : y + h, x : x + w]
+127.0.0.1 - - [06/Dec/2016 23:16:12] "POST /todo/api/v1.0/images/label HTTP/1.1" 201 -
+127.0.0.1 - - [06/Dec/2016 23:16:48] "POST /todo/api/v1.0/images/label HTTP/1.1" 201 -
+127.0.0.1 - - [06/Dec/2016 23:17:37] "POST /todo/api/v1.0/images/label HTTP/1.1" 201 -
+127.0.0.1 - - [06/Dec/2016 23:18:12] "POST /todo/api/v1.0/images/label HTTP/1.1" 201 -

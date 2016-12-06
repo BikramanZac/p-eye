@@ -276,7 +276,7 @@ def get_label(photo_file):
     y = shortest_cY - (height-shortest_cY)*parameter
 
     w = (width-shortest_cX)*parameter*2  
-    h = (height-shortest_cY)*parameter*4 
+    h = (height-shortest_cY)*parameter*3 
     crop_img = image[y : y + h, x : x + w]
     cv2.imwrite("cropped_"+ photo_file, crop_img)
     # [END image cropping]
