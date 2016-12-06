@@ -9,6 +9,7 @@ import numpy
 import imutils
 import os
 import sys
+import math
 
 
 from googleapiclient import discovery
@@ -70,7 +71,7 @@ def color_detect_and_crop_image(photo_file):
         #print crop_img.shape    
         cv2.imwrite("cropped_"+ photo_file, crop_img) 
         return 1
-
+    return 0
 # For Text detection
 def three_color_detect_and_crop_image(photo_file):
     frame = cv2.imread(photo_file)
@@ -224,8 +225,99 @@ def get_text(photo_file):
     except:
         return "was not found "
 
-
 def get_label(photo_file):
+    """Run a label request on a single image"""
+
+    # [START authenticate]
+    credentials = GoogleCredentials.get_application_default()
+    service = discovery.build('vision', 'v1', credentials=credentials)
+    # [END authenticate]
+
+    # [START image cropping]
+    image = cv2.imread(photo_file)
+    #frame.shape = (rows, colomn, color)
+    
+    width = image.shape[1]
+    height = image.shape[0]
+    centerX = width/2
+    centerY = height/2
+    shortest_cY = centerY
+    shortest_cX = centerX
+    shortest = 9999
+
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    blurred = cv2.GaussianBlur(gray, (5, 5), 0)
+    thresh = cv2.threshold(blurred, 60, 255, cv2.THRESH_BINARY)[1]
+
+    # find contours in the thresholded image
+    cnts = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,
+    cv2.CHAIN_APPROX_SIMPLE)
+    cnts = cnts[0] if imutils.is_cv2() else cnts[1]
+	
+    try:
+	    # loop over the contours
+    	for c in cnts:
+    		# compute the center of the contour
+    		M = cv2.moments(c)
+    		cX = int(M["m10"] / M["m00"])
+    		cY = int(M["m01"] / M["m00"])
+
+    		# compute distance between center of image and center of objects
+    		dist = math.hypot(centerX - cX, centerY - cY)		
+    		if(shortest > dist):		
+    			shortest = dist
+    			shortest_cY = cY
+    			shortest_cX = cX
+    except:
+	    pass
+    
+    parameter = 0.7	# decrease the number to crop more space 
+    x = shortest_cX - (width-shortest_cX)*parameter
+    y = shortest_cY - (height-shortest_cY)*parameter
+
+    w = (width-shortest_cX)*parameter*2  
+    h = (height-shortest_cY)*parameter*4 
+    crop_img = image[y : y + h, x : x + w]
+    cv2.imwrite("cropped_"+ photo_file, crop_img)
+    # [END image cropping]
+
+    photo_file = "cropped_"+ photo_file  
+    string = ""
+    maxresults = 3
+    # [START construct_request]
+    try:
+        with open(photo_file, 'rb') as image:
+            image_content = base64.b64encode(image.read())
+            service_request = service.images().annotate(body={
+                'requests': [{
+                    'image': {
+                        'content': image_content.decode('UTF-8')
+                    },
+                    'features': [{
+                        'type': 'LABEL_DETECTION',
+                        'maxResults': maxresults
+                    }]
+                }]
+            })
+            # [END construct_request]
+            # [START parse_response]
+            response = service_request.execute()
+            #label = response['responses'][0]['labelAnnotations'][0]['description']
+            
+            for key in response['responses'][0]['labelAnnotations']:
+                #print key                
+                string = string + key['description'] + " or "                           
+
+            print('Found labels: %s for %s' % (string, photo_file))
+            return string[0:-3]
+            #print('Found label: %s for %s' % (label, photo_file))
+            # [END parse_response]
+            #return label
+    except:
+        return "not found "
+
+
+def old_get_label(photo_file):
     """Run a label request on a single image"""
 
     # [START authenticate]
