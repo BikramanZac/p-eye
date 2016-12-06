@@ -242,7 +242,7 @@ def get_label(photo_file):
 
     cX = width/2 
     cY = height/2
-    parameter = 0.7	# decrease the number to crop more space 
+    parameter = 0.8	# decrease the number to crop more space 
     x = cX - (width-cX)*parameter
     y = cY - (height-cY)*parameter
 
