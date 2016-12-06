@@ -35,17 +35,17 @@ class GoogleApi(object):
                     "features":[
                         {
                           "type":"FACE_DETECTION",
-                          "maxResults":1
+                          "maxResults":5
                         },
                         
                         {
                           "type":"LABEL_DETECTION",
-                          "maxResults":1            # doesn't need it
+                          "maxResults":5            # doesn't need it
                         },
                         
                         {
                           "type":"TEXT_DETECTION",
-                          "maxResults":1
+                          "maxResults":5
                         }
                     ]
                 }]
