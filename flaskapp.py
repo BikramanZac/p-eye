@@ -122,14 +122,14 @@ def get_image_and_produce_label():
 
     # if there is some text in the picture
     if(google.is_text() == True):       
-    	text = "the text is " + google.get_text() 
+    	text = "I found text " + google.get_text() 
 	
       	# detect color and crop the picture then 
         # return 0, 1, 2 depending on the color recognition.three_color_detect_and_crop_image()
       	which_color = recognition.color_detect_and_crop_image(photo_file)
       	# if there is some text and a green contour	
       	if(which_color == 1):  # 1: green
-      		  text = "the text is " + recognition.get_text(photo_file)
+      		  text = "I found text " + recognition.get_text(photo_file)
 	
       	string = string + text
 
