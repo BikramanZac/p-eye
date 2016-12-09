@@ -23,8 +23,8 @@ greenLower = (29, 86, 6)
 greenUpper = (64, 255, 255)
 
 # text detection
-orangeLower = (0, 0, 145)
-orangeUpper = (68, 130, 255)
+orangeLower = (0, 140, 118)
+orangeUpper = (10, 235, 195)
 
 # still available
 redLower = (160, 117, 0)
@@ -68,8 +68,8 @@ def color_detect_and_crop_image(photo_file):
         
         #some parms are multiplied or devided for preserving texts in the picture
         #they still might need to be twicked little bit
-        crop_img = frame[cY/10:(cY), (cX):(width-cX/2)]
-        # crop_img = frame[(height-cY):(cY), (cX):(width-cX)]  #original cropping
+        #crop_img = frame[cY/10:(cY), (cX):(width-cX/2)]
+        crop_img = frame[(height-cY/2):(cY), (cX):(width-cX/2)]  #original cropping
         # Crop from x, y, w, h -> 100, 200, 300, 400
         # NOTE: its img[y: y + h, x: x + w] and *not* img[x: x + w, y: y + h]
         #print crop_img.shape    
