@@ -18,9 +18,13 @@ from oauth2client.client import GoogleCredentials
 # define the lower and upper boundaries of the "green"
 # ball in the HSV color space
 
-# text detection
+# still available
 greenLower = (29, 86, 6)
 greenUpper = (64, 255, 255)
+
+# text detection
+orangeLower = (0, 0, 145)
+orangeUpper = (68, 130, 255)
 
 # still available
 redLower = (160, 117, 0)
@@ -38,7 +42,7 @@ def color_detect_and_crop_image(photo_file):
     # construct a mask for the color "green", then perform
     # a series of dilations and erosions to remove any small
     # blobs left in the mask
-    mask_green = cv2.inRange(hsv, greenLower, greenUpper)
+    mask_green = cv2.inRange(hsv, orangeLower, orangeUpper)
     mask_green = cv2.erode(mask_green, None, iterations=2)
     mask_green = cv2.dilate(mask_green, None, iterations=2)
 
