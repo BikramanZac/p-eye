@@ -223,7 +223,7 @@ def get_text(photo_file):
             # [END parse_response]
             return text
     except:
-        return "was not found "
+        return " not found "
 
 def get_label(photo_file):
     """Run a label request on a single image"""
