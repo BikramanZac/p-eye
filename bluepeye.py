@@ -1,4 +1,17 @@
+"""
+This python script is run in Raspberry Pi zero for Bluep-eye
+a line of code is written in /etc/rc.local for this script to be run at boot
+ex) sudo python /home/pi/git/p-eye/bluepeye.py &
 
+WHAT IT DOES
+it keeps waiting for connection with other paired Bluetooth devices(Android phones)
+once it is connected with an Android phone through a custumized app, Bluep-eye, the app will send a letter such as i, t, f 
+for image, text, and facial expression recognitions respectively which will trigger Pi to take a picture.
+Then the image will be encoded as a string and the string gets sent to the app
+
+the backbone of this script can be found here
+https://github.com/karulis/pybluez/blob/master/examples/advanced/l2-unreliable-server.py
+""" 
 import os
 import picamera
 import sys
