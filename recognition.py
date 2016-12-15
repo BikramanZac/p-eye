@@ -314,9 +314,9 @@ def get_label(photo_file):
 
             print('Found labels: %s for %s' % (string, photo_file))
             return string[0:-3]
-            #print('Found label: %s for %s' % (label, photo_file))
-            # [END parse_response]
-            #return label
+            
+            
+            
     except:
         return "not found "
 
