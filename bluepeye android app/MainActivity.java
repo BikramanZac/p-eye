@@ -1,3 +1,7 @@
+/* 
+   A MAIN ACTIVITY FOR OBJECT, TEXT, and FACIAL EXPRESSION RECOGNITIONS
+*/
+
 package com.example.android.bluep_eye;
 
 import android.app.Activity;
@@ -105,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
                     buffer[0] = 0x69; // ASKII code hex 'i'
                     mSerialService.write(buffer);
                 }
-                // if it hasn't been connected yet, keep starting the intent until it gets paired
+                // if it hasn't been connected yet, keep starting the intent until it gets connected
                 else{
                     Intent serverIntent = new Intent(MainActivity.this, DeviceListActivity.class);
                     startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
@@ -123,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
                     buffer[0] = 0x74; // ASKII code hex 't'
                     mSerialService.write(buffer);
                 }
-                // if it hasn't been connected yet, keep starting the intent until it gets paired
+                // if it hasn't been connected yet, keep starting the intent until it gets connected
                 else{
                     Intent serverIntent = new Intent(MainActivity.this, DeviceListActivity.class);
                     startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
@@ -141,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
                     buffer[0] = 0x66;  //ASKII code hex 'f'
                     mSerialService.write(buffer);
                 }
-                // if it hasn't been connected yet, keep starting the intent until it gets paired
+                // if it hasn't been connected yet, keep starting the intent until it gets connected
                 else{
                     Intent serverIntent = new Intent(MainActivity.this, DeviceListActivity.class);
                     startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
@@ -295,3 +299,5 @@ public class MainActivity extends AppCompatActivity {
         alert.show();
     }
 }
+// please contact me if you would like to see the whole project 
+// nackyu711@gmail.com
