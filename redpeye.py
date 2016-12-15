@@ -1,3 +1,16 @@
+"""
+This python script is run in Raspberry Pi zero for standard p-eye
+a line of code is written in /etc/rc.local for this script to be run at boot
+ex) sudo python /home/pi/git/p-eye/redpeye.py &
+
+WHAT IT DOES
+It keeps waiting until GPIO pin 25 is triggered. Pin 25 is set as an interrupt and once it is triggered 
+it will run my_callback function that takes a picture, encodes the image as a string, 
+sends the string to the web service deployed in AWS, gets the result back, and finally relays to users in audio format.
+
+FYI pico2wave software is used for Text-to-speech 
+
+"""
 import select
 import os
 import sys
@@ -29,13 +42,12 @@ def my_callback(channel):
         	        camera.capture(photo_file)
                	 	print(photo_file + " is just captured!")
 
-        	try:
-        	        #label = api.get_label(photo_file)  # using google vision api
+        	try:        	        
         	        label = get_label(photo_file)
         	        print label
-        	        #subprocess.call("pico2wave -w test.wav "+'\"'+text+'\"' ,shell=True)
-               		#subprocess.call("aplay test.wav",shell=True)
-                	#os.system("sudo rm test.wav")
+        	        subprocess.call("pico2wave -w test.wav "+'\"'+text+'\"' ,shell=True)
+               		subprocess.call("aplay test.wav",shell=True)
+                	os.system("sudo rm test.wav")
                 
         	except:
                 	print "Unexpected error ", sys.exc_info()[0]
@@ -43,9 +55,8 @@ def my_callback(channel):
         	os.system("sudo rm " + photo_file)  # remove existing jpeg files first
 	time_stamp = time_now
 
-# when a falling edge is detected on port 23, regardless of whatever   
-# else is happening in the program, the function my_callback2 will be run  
-# 'bouncetime=300' includes the bounce control written into interrupts2a.py  
+# when a falling edge is detected on port 25, regardless of whatever   
+# else is happening in the program, the function my_callback will be run   
 GPIO.add_event_detect(25, GPIO.FALLING, callback=my_callback) 
 
 
@@ -94,6 +105,8 @@ if __name__ == '__main__':
         while True:
 
                 sleep(0.5)
+		
+		#debugging purpose using Keyboard
                 if is_letter_input('c'):
                         print("C is just pressed!")
                         photo_file = "image" + str(counter) + ".jpg"
