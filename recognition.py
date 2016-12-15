@@ -1,4 +1,9 @@
+"""
+WHAT IS DOES
 
+it handles cropping images and finding contours using OpenCV for object and text recognition.
+those functions are called from flaskapp.py which is run in virtual linux server deployed in Amazon Web service
+"""
 import base64
 import cStringIO
 import PIL.Image
@@ -34,6 +39,8 @@ redUpper = (192, 255, 255)
 blueLower = (99, 70, 0)
 blueUpper= (119, 255, 255)
 
+# it finds a orange colored contour(currently) and crops the image based on the position of the centor of the contour
+# this function is used for text recognition
 def color_detect_and_crop_image(photo_file):
     frame = cv2.imread(photo_file)
     frame = imutils.resize(frame, width=500)
@@ -76,123 +83,10 @@ def color_detect_and_crop_image(photo_file):
         cv2.imwrite("cropped_"+ photo_file, crop_img) 
         return 1
     return 0
-# For Text detection
-def three_color_detect_and_crop_image(photo_file):
-    frame = cv2.imread(photo_file)
-    frame = imutils.resize(frame, width=500)
-    hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
-    # construct a mask for the color "green", then perform
-    # a series of dilations and erosions to remove any small
-    # blobs left in the mask
-    mask_green = cv2.inRange(hsv, greenLower, greenUpper)
-    mask_green = cv2.erode(mask_green, None, iterations=2)
-    mask_green = cv2.dilate(mask_green, None, iterations=2)
- 	
-    
-    mask_red = cv2.inRange(hsv, redLower, redUpper)
-    mask_red = cv2.erode(mask_red, None, iterations=2)
-    mask_red = cv2.dilate(mask_red, None, iterations=2)
 
-    mask_blue = cv2.inRange(hsv, blueLower, blueUpper)
-    mask_blue = cv2.erode(mask_blue, None, iterations=2)
-    mask_blue = cv2.dilate(mask_blue, None, iterations=2) 
-	
-    # find contours in the mask and initialize the current
-    # (x, y) center of the ball
-    cnts_green = cv2.findContours(mask_green.copy(), cv2.RETR_EXTERNAL,
-            cv2.CHAIN_APPROX_SIMPLE)
-    cnts_green = cnts_green[0] if imutils.is_cv2() else cnts_green[1]
-    
-    
-    cnts_red = cv2.findContours(mask_red.copy(), cv2.RETR_EXTERNAL,
-            cv2.CHAIN_APPROX_SIMPLE)
-    cnts_red = cnts_red[0] if imutils.is_cv2() else cnts_red[1]
-
-    cnts_blue = cv2.findContours(mask_blue.copy(), cv2.RETR_EXTERNAL,
-            cv2.CHAIN_APPROX_SIMPLE)
-    cnts_blue = cnts_blue[0] if imutils.is_cv2() else cnts_blue[1]
-	
-
-	
-    
-    # only proceed if at least one red contour was found
-    if len(cnts_red) > 0:
-        print "a red contour is found!!"
-        c = max(cnts_red, key=cv2.contourArea)
-        #((x, y), radius) = cv2.minEnclosingCircle(c)
-        M = cv2.moments(c)
-        center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
-        cX = int(M["m10"] / M["m00"]) 
-        cY = int(M["m01"] / M["m00"]) 
-
-        #frame.shape rows, colomn, color
-        #print frame.shape
-        width = frame.shape[1]
-        height = frame.shape[0]
-        
-        #some parms are multiplied or devided for preserving texts in the picture
-        #they still might need to be twicked little bit
-        crop_img = frame[cY/10:(cY), (cX):(width-cX/2)]
-        # crop_img = frame[(height-cY):(cY), (cX):(width-cX)]  #original cropping
-        # Crop from x, y, w, h -> 100, 200, 300, 400
-        # NOTE: its img[y: y + h, x: x + w] and *not* img[x: x + w, y: y + h]
-        #print crop_img.shape    
-        cv2.imwrite("cropped_"+ photo_file, crop_img) 
-        return 0       
-    
-    # only proceed if at least one blue contour was found
-    if len(cnts_blue) > 0:
-        print "a blue contour is found!!"
-        c = max(cnts_blue, key=cv2.contourArea)
-        #((x, y), radius) = cv2.minEnclosingCircle(c)
-        M = cv2.moments(c)
-        center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
-        cX = int(M["m10"] / M["m00"]) 
-        cY = int(M["m01"] / M["m00"]) 
-
-        #frame.shape rows, colomn, color
-        #print frame.shape
-        width = frame.shape[1]
-        height = frame.shape[0]
-        
-        #some parms are multiplied or devided for preserving texts in the picture
-        #they still might need to be twicked little bit
-        crop_img = frame[cY/10:(cY), (cX):(width-cX/2)]
-        # crop_img = frame[(height-cY):(cY), (cX):(width-cX)]  #original cropping
-        # Crop from x, y, w, h -> 100, 200, 300, 400
-        # NOTE: its img[y: y + h, x: x + w] and *not* img[x: x + w, y: y + h]
-        #print crop_img.shape    
-        cv2.imwrite("cropped_"+ photo_file, crop_img) 
-        return 2    
-
-	# only proceed if at least one green contour was found
-    if len(cnts_green) > 0:
-        print "a green contour is found!!"
-        c = max(cnts_green, key=cv2.contourArea)
-        #((x, y), radius) = cv2.minEnclosingCircle(c)
-        M = cv2.moments(c)
-        center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
-        cX = int(M["m10"] / M["m00"]) 
-        cY = int(M["m01"] / M["m00"]) 
-
-        #frame.shape rows, colomn, color
-        #print frame.shape
-        width = frame.shape[1]
-        height = frame.shape[0]
-        
-        #some parms are multiplied or devided for preserving texts in the picture
-        #they still might need to be twicked little bit
-        crop_img = frame[cY/10:(cY), (cX):(width-cX/2)]
-        # crop_img = frame[(height-cY):(cY), (cX):(width-cX)]  #original cropping
-        # Crop from x, y, w, h -> 100, 200, 300, 400
-        # NOTE: its img[y: y + h, x: x + w] and *not* img[x: x + w, y: y + h]
-        #print crop_img.shape    
-        cv2.imwrite("cropped_"+ photo_file, crop_img) 
-        return 1
-
-    
-# open the photo and send a request to Google API. then get the response return the text
+# once the cropping is done it will send a request to Google API with the cropped image. 
+# then get the response back and return the text
 def get_text(photo_file):
     """Run a label request on a single image"""
 
@@ -229,6 +123,9 @@ def get_text(photo_file):
     except:
         return " not found "
 
+
+# crop images focusing on the center of the image in certain ratio 
+# and send those images to Google Vision API to get the label
 def get_label(photo_file):
     """Run a label request on a single image"""
 
@@ -380,6 +277,124 @@ def old_get_label(photo_file):
             return label
     except:
         return "not found "
+
+
+# no longer used
+def three_color_detect_and_crop_image(photo_file):
+    frame = cv2.imread(photo_file)
+    frame = imutils.resize(frame, width=500)
+    hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+
+    # construct a mask for the color "green", then perform
+    # a series of dilations and erosions to remove any small
+    # blobs left in the mask
+    mask_green = cv2.inRange(hsv, greenLower, greenUpper)
+    mask_green = cv2.erode(mask_green, None, iterations=2)
+    mask_green = cv2.dilate(mask_green, None, iterations=2)
+ 	
+    
+    mask_red = cv2.inRange(hsv, redLower, redUpper)
+    mask_red = cv2.erode(mask_red, None, iterations=2)
+    mask_red = cv2.dilate(mask_red, None, iterations=2)
+
+    mask_blue = cv2.inRange(hsv, blueLower, blueUpper)
+    mask_blue = cv2.erode(mask_blue, None, iterations=2)
+    mask_blue = cv2.dilate(mask_blue, None, iterations=2) 
+	
+    # find contours in the mask and initialize the current
+    # (x, y) center of the ball
+    cnts_green = cv2.findContours(mask_green.copy(), cv2.RETR_EXTERNAL,
+            cv2.CHAIN_APPROX_SIMPLE)
+    cnts_green = cnts_green[0] if imutils.is_cv2() else cnts_green[1]
+    
+    
+    cnts_red = cv2.findContours(mask_red.copy(), cv2.RETR_EXTERNAL,
+            cv2.CHAIN_APPROX_SIMPLE)
+    cnts_red = cnts_red[0] if imutils.is_cv2() else cnts_red[1]
+
+    cnts_blue = cv2.findContours(mask_blue.copy(), cv2.RETR_EXTERNAL,
+            cv2.CHAIN_APPROX_SIMPLE)
+    cnts_blue = cnts_blue[0] if imutils.is_cv2() else cnts_blue[1]
+	
+
+	
+    
+    # only proceed if at least one red contour was found
+    if len(cnts_red) > 0:
+        print "a red contour is found!!"
+        c = max(cnts_red, key=cv2.contourArea)
+        #((x, y), radius) = cv2.minEnclosingCircle(c)
+        M = cv2.moments(c)
+        center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
+        cX = int(M["m10"] / M["m00"]) 
+        cY = int(M["m01"] / M["m00"]) 
+
+        #frame.shape rows, colomn, color
+        #print frame.shape
+        width = frame.shape[1]
+        height = frame.shape[0]
+        
+        #some parms are multiplied or devided for preserving texts in the picture
+        #they still might need to be twicked little bit
+        crop_img = frame[cY/10:(cY), (cX):(width-cX/2)]
+        # crop_img = frame[(height-cY):(cY), (cX):(width-cX)]  #original cropping
+        # Crop from x, y, w, h -> 100, 200, 300, 400
+        # NOTE: its img[y: y + h, x: x + w] and *not* img[x: x + w, y: y + h]
+        #print crop_img.shape    
+        cv2.imwrite("cropped_"+ photo_file, crop_img) 
+        return 0       
+    
+    # only proceed if at least one blue contour was found
+    if len(cnts_blue) > 0:
+        print "a blue contour is found!!"
+        c = max(cnts_blue, key=cv2.contourArea)
+        #((x, y), radius) = cv2.minEnclosingCircle(c)
+        M = cv2.moments(c)
+        center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
+        cX = int(M["m10"] / M["m00"]) 
+        cY = int(M["m01"] / M["m00"]) 
+
+        #frame.shape rows, colomn, color
+        #print frame.shape
+        width = frame.shape[1]
+        height = frame.shape[0]
+        
+        #some parms are multiplied or devided for preserving texts in the picture
+        #they still might need to be twicked little bit
+        crop_img = frame[cY/10:(cY), (cX):(width-cX/2)]
+        # crop_img = frame[(height-cY):(cY), (cX):(width-cX)]  #original cropping
+        # Crop from x, y, w, h -> 100, 200, 300, 400
+        # NOTE: its img[y: y + h, x: x + w] and *not* img[x: x + w, y: y + h]
+        #print crop_img.shape    
+        cv2.imwrite("cropped_"+ photo_file, crop_img) 
+        return 2    
+
+	# only proceed if at least one green contour was found
+    if len(cnts_green) > 0:
+        print "a green contour is found!!"
+        c = max(cnts_green, key=cv2.contourArea)
+        #((x, y), radius) = cv2.minEnclosingCircle(c)
+        M = cv2.moments(c)
+        center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
+        cX = int(M["m10"] / M["m00"]) 
+        cY = int(M["m01"] / M["m00"]) 
+
+        #frame.shape rows, colomn, color
+        #print frame.shape
+        width = frame.shape[1]
+        height = frame.shape[0]
+        
+        #some parms are multiplied or devided for preserving texts in the picture
+        #they still might need to be twicked little bit
+        crop_img = frame[cY/10:(cY), (cX):(width-cX/2)]
+        # crop_img = frame[(height-cY):(cY), (cX):(width-cX)]  #original cropping
+        # Crop from x, y, w, h -> 100, 200, 300, 400
+        # NOTE: its img[y: y + h, x: x + w] and *not* img[x: x + w, y: y + h]
+        #print crop_img.shape    
+        cv2.imwrite("cropped_"+ photo_file, crop_img) 
+        return 1
+
+
 
 """    
 def detect_face(photo_file):
