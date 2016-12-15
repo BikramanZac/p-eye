@@ -1,18 +1,3 @@
-from flask import Flask, jsonify, request, abort
-import base64
-import cStringIO
-import PIL.Image
-import urllib2 as urllib
-import io
-import cv2
-import numpy
-import imutils
-import os
-import recognition
-from GoogleApi import GoogleApi
-
-from googleapiclient import discovery
-from oauth2client.client import GoogleCredentials
 """
 RESTful API Service  available method : GET, POST
 
@@ -30,8 +15,25 @@ RESTful API Service  available method : GET, POST
        data = {'encode' : encoded_string }
        headers = {'Content-Type': 'application/json'}
        r = requests.post(url, data = json.dumps(data), headers = headers)
+       
+   Currently has 4 POST requests: one for standard p-eye and three for Bluep-eye
 """
 
+from flask import Flask, jsonify, request, abort
+import base64
+import cStringIO
+import PIL.Image
+import urllib2 as urllib
+import io
+import cv2
+import numpy
+import imutils
+import os
+import recognition
+from GoogleApi import GoogleApi
+
+from googleapiclient import discovery
+from oauth2client.client import GoogleCredentials
 
 app = Flask(__name__)
 
@@ -46,6 +48,7 @@ images = [
 
 counter = 0
 
+# decodes a image, saves it temporarily, and returns the name of the image
 def recompile_image(encoded):
     global counter
     # decode the encoded string of image
@@ -59,11 +62,12 @@ def recompile_image(encoded):
     counter += 1
     return photo_file
 
+# deletes images that are temporarily saved and save the results from Google Vision API in the 'images' dictionary 
 def delete_pictures_and_save_results(label):
     global counter
     #delete pictures that were saved
-####os.system('rm pilpic*.jpg')
-####os.system('rm cropped_pilpic*.jpg')
+    os.system('rm pilpic*.jpg')
+    os.system('rm cropped_pilpic*.jpg')
 
     # create a new dictionary that contains the generated label 
     image = {
@@ -146,7 +150,8 @@ def get_image_and_produce_label():
 
 
 
-#these following POST requests are specifically for the android app
+# these following POST requests are specifically for the android app
+# 3 functionalities of P-eye are separated for users to decide (there are 3 buttons in Android app) 
 @app.route('/todo/api/v1.0/images/label', methods=['POST'])
 def label_recognition():
     if not request.json or not 'encode' in request.json:
