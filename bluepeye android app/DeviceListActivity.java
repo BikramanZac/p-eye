@@ -1,3 +1,8 @@
+/* 
+an activity for listing paired devices that shows up to establish the connection
+to establish the connection between P-eye and the app
+*/
+
 package com.example.android.bluep_eye;
 
 import android.app.Activity;
