@@ -1,4 +1,4 @@
-# p-eye - Affordable Vision Assistant Tool
+# P-eye - Affordable Vision Assistant Tool
 
 P-eye is a 3D-printed pair of glasses that utilize cloud computing services and machine learning techniques to analyze image content and relay it back in an audio format for people who are visually impaired.
 
