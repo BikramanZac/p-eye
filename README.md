@@ -13,4 +13,4 @@ P-eye is a 3D-printed pair of glasses that utilize cloud computing services and 
 
 
 ## Website
-https://kyubinhan11.github.io/showcase/
+https://kyubinhan11.github.io/showcase/p-eye/
