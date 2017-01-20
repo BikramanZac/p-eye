@@ -1,7 +1,6 @@
-/* 
+/*
     A MAIN ACTIVITY FOR OBJECT, TEXT, and FACIAL EXPRESSION RECOGNITIONS
 */
-
 package com.example.android.bluep_eye;
 
 import android.app.Activity;
@@ -22,7 +21,13 @@ import android.os.Handler;
 
 import android.app.AlertDialog;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
+import java.util.Random;
+
+import static android.R.id.list;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -71,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
     private Button textRecogntion;
     private Button faceRecogntion;
     private boolean isConnected = false;
+    private Intent serverIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +93,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onInit(int status) {
                 if(status != TextToSpeech.ERROR) {
-                    tts.setLanguage(Locale.UK);  // UK: English accent, US: American accent
+                    // randomly pick the type of English Accent just for fun :)
+                    // it changes the accent everytime users re-open the app
+                    Random randomizer = new Random();
+                    List<Locale> listLocale = new ArrayList<Locale>();
+                    listLocale.add(Locale.US); listLocale.add(Locale.UK); listLocale.add(Locale.CANADA);
+                    Locale randomLocale = listLocale.get(randomizer.nextInt(listLocale.size()));
+                    tts.setLanguage(randomLocale);  // UK: English accent, US: American accent
                 }
             }
         });
@@ -96,22 +108,24 @@ public class MainActivity extends AppCompatActivity {
         mSerialService = new BluetoothSerialService(this, mEmulatorView, tts, mHandlerBT);
 
         // start an intent to pair bluetooth devices
-        Intent serverIntent = new Intent(this, DeviceListActivity.class);
+        serverIntent = new Intent(this, DeviceListActivity.class);
         startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
 
         // 0x69 : object  0x74 : text  0x66 : facial expression
         imageRecognition.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if(isConnected == true) {
-                    String toSpeak = "Image recognition";
+                    String toSpeak = "Object recognition";
                     tts.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null, new String(this.hashCode() + ""));
                     byte[] buffer = new byte[1];
                     buffer[0] = 0x69; // ASKII code hex 'i'
                     mSerialService.write(buffer);
                 }
-                // if it hasn't been connected yet, keep starting the intent until it gets connected
+                // if it hasn't been connected yet, keep starting the intent until it gets paired
                 else{
-                    Intent serverIntent = new Intent(MainActivity.this, DeviceListActivity.class);
+                    tts.speak("Please connect the device first",
+                            TextToSpeech.QUEUE_FLUSH, null, new String(this.hashCode() + ""));
+                    serverIntent = new Intent(MainActivity.this, DeviceListActivity.class);
                     startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
                 }
 
@@ -127,9 +141,11 @@ public class MainActivity extends AppCompatActivity {
                     buffer[0] = 0x74; // ASKII code hex 't'
                     mSerialService.write(buffer);
                 }
-                // if it hasn't been connected yet, keep starting the intent until it gets connected
+                // if it hasn't been connected yet, keep starting the intent until it gets paired
                 else{
-                    Intent serverIntent = new Intent(MainActivity.this, DeviceListActivity.class);
+                    tts.speak("Please connect the device first", TextToSpeech.QUEUE_FLUSH,
+                            null, new String(this.hashCode() + ""));
+                    serverIntent = new Intent(MainActivity.this, DeviceListActivity.class);
                     startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
                 }
             }
@@ -145,9 +161,11 @@ public class MainActivity extends AppCompatActivity {
                     buffer[0] = 0x66;  //ASKII code hex 'f'
                     mSerialService.write(buffer);
                 }
-                // if it hasn't been connected yet, keep starting the intent until it gets connected
+                // if it hasn't been connected yet, keep starting the intent until it gets paired
                 else{
-                    Intent serverIntent = new Intent(MainActivity.this, DeviceListActivity.class);
+                    tts.speak("Please connect the device first",
+                            TextToSpeech.QUEUE_FLUSH, null, new String(this.hashCode() + ""));
+                    serverIntent = new Intent(MainActivity.this, DeviceListActivity.class);
                     startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
                 }
             }
@@ -299,5 +317,3 @@ public class MainActivity extends AppCompatActivity {
         alert.show();
     }
 }
-// please contact me if you would like to see the whole project 
-// nackyu711@gmail.com
